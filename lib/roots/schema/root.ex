@@ -17,6 +17,7 @@ defmodule Seed.Roots.Schema.Root do
     property(:rsaPublic, :string)
     property(:createdAt, :utc_datetime)
     property(:updatedAt, :utc_datetime)
+    outgoing_relationship("IS_ENTITY", Seed.Entities.Schema.Entity, :entities, Seed.Entities.Schema.Relationships.NoProps.RootToEntity.IsEntity, cardinality: :many)
   end
 
   def changeset(params \\ %{}) do
