@@ -21,7 +21,7 @@ defmodule Seed.Entities.Services.Creation do
     end
   end
 
-   defp create_root_relation(entity) do
+  defp create_root_relation(entity) do
     match(
       [
         {e, Entity, %{uuid: entity.uuid}},
