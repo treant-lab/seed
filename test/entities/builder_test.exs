@@ -20,6 +20,6 @@ defmodule SeedTest.Entities.Builder do
 
     assert {:ok, fields} = Field.create_fields(entity, fields)
 
-    assert {:ok, module} = Seed.Entities.Schema.Builder.by_id(entity.uuid)
+    assert {:ok, module} = Seed.Entities.Services.EntityBuilder.by_id(entity.uuid)
   end
 end
