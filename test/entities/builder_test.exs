@@ -20,6 +20,11 @@ defmodule SeedTest.Entities.Builder do
 
     assert {:ok, fields} = Field.create_fields(entity, fields)
 
-    assert {:ok, module} = Seed.Entities.Services.EntityBuilder.by_id(entity.uuid)
+    assert {:ok, module} = Seed.Entities.Services.EntityBuilder.call(entity)
+
+    assert Enum.count([:uuid, :age, :email, :password, :username]) ==
+             Enum.count(module.__schema__(:properties))
+
+    assert module.changeset(%{}).valid? == false
   end
 end

@@ -1,10 +1,7 @@
 defmodule Seed.Entities.Services.EntityBuilder do
-  alias Seed.Entities.Repository.Reader
   alias Seed.Database.Repo
 
-  def by_id(uuid) do
-    {:ok, entity} = Reader.by_id(uuid)
-
+  def call(entity) do
     entity =
       entity
       |> Repo.Node.preload(:fields)
@@ -15,5 +12,10 @@ defmodule Seed.Entities.Services.EntityBuilder do
       end
 
     {:ok, module}
+  end
+
+  def call!(entity) do
+    {:ok, module} = call(entity)
+    module
   end
 end

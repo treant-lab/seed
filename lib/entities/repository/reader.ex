@@ -1,7 +1,7 @@
 defmodule Seed.Entities.Repository.Reader do
   alias Seed.Database.Repo
-  alias Seed.Entities.Schema.{Entity, Relationships.Field}
-  alias Seed.Entities.Schema.Relationships.NoProps.{EntityToField.IsField, RootToEntity.IsEntity}
+  alias Seed.Entities.Schema.Entity
+  alias Seed.Entities.Schema.Relationships.NoProps.RootToEntity.IsEntity
   alias Seed.Roots.Schema.Root
   import Seraph.Query
 
@@ -21,16 +21,16 @@ defmodule Seed.Entities.Repository.Reader do
     end
   end
 
+  @spec find(binary) :: [map] | %{results: [map], stats: map}
   def find(name) when is_binary(name) do
-    query =
-      match([
-        {r, Root, %{uuid: Seed.Settings.App.id()}},
-        {entity, Entity},
-        [{r}, [rel, IsEntity], {entity}]
-      ])
-      |> where(contains(entity.name, name))
-      |> return([entity])
-      |> Repo.all()
+    match([
+      {r, Root, %{uuid: Seed.Settings.App.id()}},
+      {entity, Entity},
+      [{r}, [rel, IsEntity], {entity}]
+    ])
+    |> where(contains(entity.name, name))
+    |> return([entity])
+    |> Repo.all()
   end
 
   def by_id(uuid) do
@@ -50,6 +50,19 @@ defmodule Seed.Entities.Repository.Reader do
     end
   end
 
-  def preload_fields(entity) do
+  def all() do
+    match([
+      {r, Root, %{uuid: Seed.Settings.App.id()}},
+      {entity, Entity},
+      [{r}, [rel, IsEntity], {entity}]
+    ])
+    |> return([entity])
+    |> Repo.all()
+    |> extract_entity()
+  end
+
+  defp extract_entity(entities) when is_list(entities) do
+    entities
+    |> Enum.map(fn %{"entity" => entity} -> entity end)
   end
 end

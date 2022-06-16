@@ -12,6 +12,12 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
           property(String.to_atom(field.name), get_field_type(field))
         end)
       end
+
+      def changeset(payload \\ %{}) do
+        %__MODULE__{}
+        |> cast(payload, get_cast_fields(@entity))
+        |> validate_required(get_required_fields(@entity))
+      end
     end
   end
 end

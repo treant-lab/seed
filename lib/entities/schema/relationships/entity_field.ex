@@ -30,8 +30,8 @@ defmodule Seed.Entities.Schema.Relationships.Field do
 
   def changeset(node, params) do
     node
-    |> cast(params, [:name, :type, :defaultValue])
-    |> validate_required([:name, :type])
+    |> cast(params, [:name, :type, :defaultValue, :required])
+    |> validate_required([:name, :type, :required])
     |> put_change(:createdAt, DateTime.truncate(DateTime.utc_now(), :second))
   end
 end
