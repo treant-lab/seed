@@ -3,7 +3,7 @@ defmodule SeedTest.Repository.Insert do
   alias Seed.Entities.Repository.Aggregates.Field
   alias Seed.Database.Repo
 
-  test "should insert the data when the params is right" do
+  setup do
     random_string = for _ <- 1..10, into: "", do: <<Enum.random('0123456789abcdef')>>
 
     fields = [
@@ -14,14 +14,19 @@ defmodule SeedTest.Repository.Insert do
     ]
     name = "Example#{random_string}"
 
-    assert {:ok, entity} =
+    {:ok, entity} =
              Seed.Entities.Services.Creation.call(%{
                name: name,
-               color: "#ffffff"
+               color: "#ffffff",
+               fields: fields
              })
 
-    assert {:ok, fields} = Field.create_fields(entity, fields)
+    %{name: name}
+  end
+
+  test "should insert the data when the params is right", %{name: name} do
 
     Seed.Server.Repository.Client.insert(name, %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}, self())
+    |> IO.inspect()
   end
 end
