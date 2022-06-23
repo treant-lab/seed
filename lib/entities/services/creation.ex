@@ -13,12 +13,18 @@ defmodule Seed.Entities.Services.Creation do
          changeset <- Entity.changeset(params),
          {:ok, entity} <- Repo.Node.create(changeset),
          {:ok, _relation} <- create_root_relation(entity) do
+      push_schema_to_entity(entity)
       {:ok, entity}
     else
       nil -> {:error, :empty_name}
       true -> {:error, :already_exists}
       {:error, changeset} -> {:error, changeset}
     end
+  end
+
+  defp push_schema_to_entity(entity) do
+    module = Seed.Entities.Services.EntityBuilder.call!(entity)
+    Seed.Server.Entity.Client.push_schema(module)
   end
 
   defp create_root_relation(entity) do

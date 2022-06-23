@@ -10,4 +10,12 @@ defmodule Seed.Server.Entity.Imp do
 
     schemas
   end
+
+  def get(name, schemas) do
+    atom_name = String.to_atom(name)
+
+    Enum.find(schemas, fn schema ->
+      schema == atom_name
+    end)
+  end
 end

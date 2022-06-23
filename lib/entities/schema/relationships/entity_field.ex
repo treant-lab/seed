@@ -1,6 +1,7 @@
 defmodule Seed.Entities.Schema.Relationships.Field do
   use Seraph.Schema.Node
   import Seraph.Changeset
+  alias Seed.Entities.Schema.Entity
   alias Seed.Entities.Schema.Relationships.{Field, NoProps}
 
   @type t :: %{
@@ -19,12 +20,12 @@ defmodule Seed.Entities.Schema.Relationships.Field do
     property(:createdAt, :utc_datetime)
     property(:updatedAt, :utc_datetime)
 
-    outgoing_relationship(
+    incoming_relationship(
       "IS_FIELD",
-      Field,
-      :is_field,
+      Entity,
+      :owner,
       NoProps.EntityToField.IsField,
-      cardinality: :many
+      cardinality: :one
     )
   end
 

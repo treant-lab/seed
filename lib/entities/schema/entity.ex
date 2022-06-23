@@ -17,20 +17,20 @@ defmodule Seed.Entities.Schema.Entity do
     property(:createdAt, :utc_datetime)
     property(:updatedAt, :utc_datetime)
 
-    incoming_relationship(
-      "IS_ENTITY",
-      Seed.Roots.Schema.Root,
-      :root,
-      NoProps.RootToEntity.IsEntity,
-      cardinality: :one
-    )
-
     outgoing_relationship(
       "IS_FIELD",
       Field,
       :fields,
       NoProps.EntityToField.IsField,
       cardinality: :many
+    )
+
+    incoming_relationship(
+      "IS_ENTITY",
+      Seed.Roots.Schema.Root,
+      :root,
+      NoProps.RootToEntity.IsEntity,
+      cardinality: :one
     )
 
     outgoing_relationship(

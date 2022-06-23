@@ -11,7 +11,7 @@ defmodule Seed.Entities.Schema.Relationships.Role do
       Role,
       :is_role,
       NoProps.RoleToEntity.IsRole,
-      cardinality: :many
+      cardinality: :one
     )
   end
 end

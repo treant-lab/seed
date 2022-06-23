@@ -4,7 +4,7 @@ defmodule Seed.Entities.Services.EntityBuilder do
   def call(entity) do
     entity =
       entity
-      |> Repo.Node.preload(:fields)
+      |> Repo.Node.preload(:is_field)
 
     {:module, module, _, _} =
       defmodule :"#{entity.name}" do

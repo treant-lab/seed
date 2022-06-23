@@ -8,6 +8,6 @@ defmodule Seed.Application do
       Seed.Server.Entity
     ]
 
-    Supervisor.start_link(children, strategy: :one_for_one, name: Seed.Application)
+    Supervisor.start_link(children, strategy: :one_for_one, name: :"#{Seed.Settings.App.id()}")
   end
 end
