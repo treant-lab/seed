@@ -14,7 +14,6 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       end
 
       def changeset(payload \\ %{}) do
-
         %__MODULE__{}
         |> cast(payload, get_cast_fields(@entity))
         |> validate_required(get_required_fields(@entity))

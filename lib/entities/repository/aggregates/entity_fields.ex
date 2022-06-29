@@ -6,11 +6,22 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
   @spec create_fields(Entity.t(), list(Field.t())) :: {:ok, list(Field.t())} | {:error, any()}
   def create_fields(entity, fields) do
-    with {:ok, fields} <- create_all_fields(fields),
+    with :ok <- includes_duplicated?(fields),
+         {:ok, fields} <- create_all_fields(fields),
          {:ok, relations} <- create_is_field_relation_for_all(entity, fields) do
-          {:ok, fields}
+      {:ok, fields}
     else
       error -> {:error, error}
+    end
+  end
+
+  defp includes_duplicated?(fields) do
+    names = Enum.map(fields, & &1.name)
+    duplicated_names = names -- Enum.uniq(names)
+
+    case duplicated_names do
+      [] -> :ok
+      _ -> {:error, duplicated_names}
     end
   end
 
@@ -51,13 +62,13 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
       {:ok, only_task_values}
     else
-      {:error, :bad_params}
+      {:error, {:bad_params, responses}}
     end
   end
 
   defp create_entity_field(field) do
-      entity_field_changeset = Field.changeset(%Field{}, field)
+    entity_field_changeset = Field.changeset(%Field{}, field)
 
-      Repo.Node.create(entity_field_changeset)
+    Repo.Node.create(entity_field_changeset)
   end
 end

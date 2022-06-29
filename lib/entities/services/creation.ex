@@ -7,23 +7,29 @@ defmodule Seed.Entities.Services.Creation do
   import Seraph.Query
   alias Seed.Entities.Repository.Aggregates.Field
 
-
   @spec call(map) :: {:ok, Entity.t()} | {:error, any}
   def call(params \\ %{}) do
     fields = Map.get(params, :fields, [])
+
     with name when is_binary(name) <- Map.get(params, :name, nil),
          false <- Reader.exists?(name),
          changeset <- Entity.changeset(params),
          {:ok, entity} <- Repo.Node.create(changeset),
          {:ok, _relation} <- create_root_relation(entity),
-         {:ok, fields} <- Field.create_fields(entity, fields) do
+         {:ok, _fields} <- Field.create_fields(entity, fields) do
       push_schema_to_entity(entity)
       {:ok, entity}
     else
       nil -> {:error, :empty_name}
       true -> {:error, :already_exists}
+      {:error, {:bad_params, fields_with_error}} -> delete_nodes_with_error(fields_with_error)
       {:error, changeset} -> {:error, changeset}
     end
+  end
+
+  defp delete_nodes_with_error(fields_with_error) do
+    IO.inspect(fields_with_error)
+    {:error, :bad_params}
   end
 
   defp push_schema_to_entity(entity) do
