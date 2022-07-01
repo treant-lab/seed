@@ -16,8 +16,17 @@ defmodule Seed.Server.Entity do
     {:reply, entity, state}
   end
 
+  def handle_call(:get_schemas, _from, %State{schemas: schemas} = state) do
+    {:reply, schemas, state}
+  end
+
   def handle_cast({:push_schema, schema}, state) do
     state = State.push_schema(state, schema)
+    {:noreply, state}
+  end
+
+  def handle_cast({:remove_schema, schema}, state) do
+    state = State.remove_schema(state, schema)
     {:noreply, state}
   end
 end

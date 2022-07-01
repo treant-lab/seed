@@ -6,7 +6,6 @@ defmodule Seed.Entities.Repository.Remover do
   import Seraph.Query
 
   def by_id(uuid) when is_binary(uuid) do
-    query =
       match([
         {r, Root, %{uuid: Seed.Settings.App.id()}},
         {entity, Entity, %{uuid: uuid}},
@@ -16,7 +15,8 @@ defmodule Seed.Entities.Repository.Remover do
       |> Repo.one()
       |> case do
         nil -> {:error, :invalid_id}
-        %{"entity" => entity} -> Repo.Node.delete(entity)
+        %{"entity" => entity} ->
+          Repo.Node.delete(entity)
       end
   end
 end

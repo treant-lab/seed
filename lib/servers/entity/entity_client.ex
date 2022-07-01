@@ -6,4 +6,12 @@ defmodule Seed.Server.Entity.Client do
   def push_schema(schema) do
     GenServer.cast(Seed.Util.entity(), {:push_schema, schema})
   end
+
+  def remove_schema(schema) when is_atom(schema) do
+    GenServer.cast(Seed.Util.entity(), {:remove_schema, schema})
+  end
+
+  def get_schemas() do
+    GenServer.call(Seed.Util.entity(), :get_schemas)
+  end
 end
