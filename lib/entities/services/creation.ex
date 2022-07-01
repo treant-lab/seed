@@ -28,7 +28,6 @@ defmodule Seed.Entities.Services.Creation do
   end
 
   defp delete_nodes_with_error(fields_with_error) do
-    IO.inspect(fields_with_error)
     {:error, :bad_params}
   end
 

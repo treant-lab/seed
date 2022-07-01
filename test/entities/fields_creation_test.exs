@@ -33,6 +33,5 @@ defmodule SeedTest.Entity.FieldCreation do
                  %{name: "age", type: "number", required: true}
                ]
              })
-             |> IO.inspect()
   end
 end
