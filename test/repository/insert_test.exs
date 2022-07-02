@@ -26,7 +26,8 @@ defmodule SeedTest.Repository.Insert do
 
   test "should insert the data when the params is right", %{name: name} do
 
-    Seed.Server.Repository.Client.insert(name, %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}, self())
-    |> IO.inspect()
+    assert {:ok, entity} = Seed.Server.Repository.Client.insert(name, %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}, self())
+    IO.inspect(entity)
+    entity = Repo.Node.preload(entity, :is_data)
   end
 end

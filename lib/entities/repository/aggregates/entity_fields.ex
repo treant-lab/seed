@@ -8,7 +8,7 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
   def create_fields(entity, fields) do
     with :ok <- includes_duplicated?(fields),
          {:ok, fields} <- create_all_fields(fields),
-         {:ok, relations} <- create_is_field_relation_for_all(entity, fields) do
+         {:ok, _relations} <- create_is_field_relation_for_all(entity, fields) do
       {:ok, fields}
     else
       error -> {:error, error}

@@ -6,11 +6,31 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       import Seed.Entity.Services.Builder.Macros.Schema.Imp
       @entity Keyword.get(opts, :entity)
 
+      defmodule __MODULE__.IsData do
+        use Seraph.Schema.Relationship
+
+        @cardinality [outgoing: :one]
+
+        relationship "IS_DATA" do
+          start_node __MODULE__
+          end_node Seed.Roots.Schema.Root
+        end
+      end
+
+
       node @entity.name do
         @entity.fields
         |> Enum.each(fn field ->
           property(String.to_atom(field.name), get_field_type(field))
         end)
+
+        outgoing_relationship(
+          "IS_DATA",
+          Root,
+          :root,
+          __MODULE__.IsData,
+          cardinality: :one
+        )
       end
 
       def changeset(payload \\ %{}) do
