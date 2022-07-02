@@ -23,7 +23,7 @@ defmodule Seed.Server.Repository.Imp do
     RETURN e, rel, root
     """, %{entity_id: entity.uuid, app_id: App.id()})
     |> case do
-      {:ok, data} -> IO.inspect(data)
+      {:ok, _data} ->
       {:ok, entity}
       err -> err
     end

@@ -4,16 +4,17 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       use Seraph.Schema.Node
       import Seraph.Changeset
       import Seed.Entity.Services.Builder.Macros.Schema.Imp
+      alias Seed.Roots.Schema.Root
       @entity Keyword.get(opts, :entity)
-
+      entity_module = __MODULE__
       defmodule __MODULE__.IsData do
         use Seraph.Schema.Relationship
 
         @cardinality [outgoing: :one]
 
         relationship "IS_DATA" do
-          start_node __MODULE__
-          end_node Seed.Roots.Schema.Root
+          start_node entity_module
+          end_node Root
         end
       end
 
