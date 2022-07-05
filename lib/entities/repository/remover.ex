@@ -5,18 +5,40 @@ defmodule Seed.Entities.Repository.Remover do
   alias Seed.Roots.Schema.Root
   import Seraph.Query
 
-  def by_id(uuid) when is_binary(uuid) do
-      match([
-        {r, Root, %{uuid: Seed.Settings.App.id()}},
-        {entity, Entity, %{uuid: uuid}},
-        [{r}, [rel, IsEntity], {entity}]
-      ])
-      |> return([entity])
-      |> Repo.one()
-      |> case do
-        nil -> {:error, :invalid_id}
-        %{"entity" => entity} ->
-          Repo.Node.delete(entity)
-      end
+  def by_id(uuid, soft_delete? \\ false) when is_binary(uuid) do
+    match([
+      {r, Root, %{uuid: Seed.Settings.App.id()}},
+      {entity, Entity, %{uuid: uuid}},
+      [{r}, [rel, IsEntity], {entity}]
+    ])
+    |> return([entity])
+    |> Repo.one()
+    |> case do
+      nil ->
+        {:error, :invalid_id}
+
+      %{"entity" => entity} ->
+        delete_entity(entity, soft_delete?)
+    end
+  end
+
+  defp delete_entity(entity, true = _soft_delete?) do
+    Repo.query(
+      """
+      MATCH (root:Root {uuid: $app_id})-[is_data:IS_ENTITY]-(n {uuid: $entity_id})
+      CREATE (root)-[deleted_data:DELETED_DATA]->(n)
+      SET deleted_data = is_data
+      WITH is_data
+      DELETE is_data
+      """,
+      %{
+        app_id: Seed.Settings.App.id(),
+        entity_id: entity.uuid
+      }
+    )
+  end
+
+  defp delete_entity(entity, false = _soft_delete?) do
+    Repo.Node.delete(entity)
   end
 end

@@ -18,6 +18,17 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
         end
       end
 
+      defmodule __MODULE__.DeletedData do
+        use Seraph.Schema.Relationship
+
+        @cardinality [outgoing: :one]
+
+        relationship "DELETED_DATA" do
+          start_node entity_module
+          end_node Root
+        end
+      end
+
 
       node @entity.name do
         @entity.fields
@@ -30,6 +41,14 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
           Root,
           :root,
           __MODULE__.IsData,
+          cardinality: :one
+        )
+
+        outgoing_relationship(
+          "DELETED_DATA",
+          Root,
+          :soft_deleted,
+          __MODULE__.DeletedData,
           cardinality: :one
         )
       end

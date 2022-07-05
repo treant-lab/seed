@@ -16,4 +16,10 @@ defmodule Seed.Server.Repository do
 
     {:reply, response, state}
   end
+
+  def handle_call({:delete_by_id, id, soft_delete?}, _from, state) do
+    response = Imp.delete({:delete_by_id, id, soft_delete?})
+
+    {:reply, response, state}
+  end
 end
