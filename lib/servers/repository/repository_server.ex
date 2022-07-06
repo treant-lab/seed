@@ -22,4 +22,10 @@ defmodule Seed.Server.Repository do
 
     {:reply, response, state}
   end
+
+  def handle_call({:update_by_id, module, id, payload}, _from, state) do
+    response = Imp.update_by_id(module, id, payload)
+
+    {:reply, response, state}
+  end
 end

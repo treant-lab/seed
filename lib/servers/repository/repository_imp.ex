@@ -80,4 +80,12 @@ defmodule Seed.Server.Repository.Imp do
     entity_module = Seed.Server.Entity.Client.get_module(entity_name)
     Repo.Node.get(entity_module, id)
   end
+
+  def update_by_id(entity_name, id, payload) do
+    entity_module = Seed.Server.Entity.Client.get_module(entity_name)
+    entity = find_entity_by_id(entity_name, id)
+
+    entity_module.changeset_update(entity, payload)
+    |> Repo.Node.set()
+  end
 end

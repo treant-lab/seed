@@ -7,14 +7,15 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       alias Seed.Roots.Schema.Root
       @entity Keyword.get(opts, :entity)
       entity_module = __MODULE__
+
       defmodule __MODULE__.IsData do
         use Seraph.Schema.Relationship
 
         @cardinality [outgoing: :one]
 
         relationship "IS_DATA" do
-          start_node entity_module
-          end_node Root
+          start_node(entity_module)
+          end_node(Root)
         end
       end
 
@@ -24,11 +25,10 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
         @cardinality [outgoing: :one]
 
         relationship "DELETED_DATA" do
-          start_node entity_module
-          end_node Root
+          start_node(entity_module)
+          end_node(Root)
         end
       end
-
 
       node @entity.name do
         @entity.fields
@@ -57,6 +57,11 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
         %__MODULE__{}
         |> cast(payload, get_cast_fields(@entity))
         |> validate_required(get_required_fields(@entity))
+      end
+
+      def changeset_update(entity, payload \\ %{}) do
+        entity
+        |> cast(payload, get_cast_fields(@entity))
       end
     end
   end
