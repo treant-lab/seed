@@ -6,4 +6,8 @@ defmodule Seed.Util do
   def entity() do
     :"Entity-#{Seed.Settings.App.id()}"
   end
+
+  def authentication() do
+    :"Authentication-#{Seed.Settings.App.id()}"
+  end
 end

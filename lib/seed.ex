@@ -5,7 +5,8 @@ defmodule Seed.Application do
     children = [
       Seed.Database.Repo,
       Seed.Server.Repository,
-      Seed.Server.Entity
+      Seed.Server.Entity,
+      Seed.Server.Authentication
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: :"#{Seed.Settings.App.id()}")
