@@ -27,7 +27,9 @@ defmodule Seed.MixProject do
       {:seraph, "~> 0.2.0"},
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
-      {:stream_data, "~> 0.5", only: :test}
+      {:stream_data, "~> 0.5", only: :test},
+      {:bamboo, "~> 2.2.0"},
+      {:mjml, "~> 1.3.5"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
