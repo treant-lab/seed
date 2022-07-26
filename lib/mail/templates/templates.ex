@@ -13,13 +13,15 @@ defmodule Seed.Mail.Sender.Templates do
   end
 
   def generate({template_name, params}) do
-    template =
-      get_all()
-      |> Enum.find(&(&1.name == template_name))
-
-    builded_template = generate_template(template, params)
-
-    {:ok, builded_template}
+    with template when is_struct(template, Template) <-
+           get_all()
+           |> Enum.find(&(&1.name == template_name)) do
+      builded_template = generate_template(template, params)
+      {:ok, builded_template}
+    else
+      nil -> {:error, :template_not_found}
+      _ -> {:error, "Unexpected error"}
+    end
   end
 
   defp generate_template(nil, _) do
