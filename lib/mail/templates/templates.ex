@@ -24,14 +24,11 @@ defmodule Seed.Mail.Sender.Templates do
     end
   end
 
-  defp generate_template(nil, _) do
-    {:error, "Mail template not found"}
-  end
-
-  defp generate_template(%Template{} = template, _params) do
+  defp generate_template(%Template{} = template, params) do
     {:ok, html} =
       template.file_path
       |> File.read!()
+      |> replace_variables(params)
       |> Mjml.to_html()
 
     %{
@@ -39,5 +36,10 @@ defmodule Seed.Mail.Sender.Templates do
       from: template.default_from,
       template: html
     }
+  end
+
+  defp replace_variables(text, params) do
+    Map.keys(params)
+    |> Enum.reduce(text, &(String.replace(&2, "{{ #{&1} }}", params[&1], global: true)))
   end
 end
