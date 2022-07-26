@@ -14,9 +14,8 @@ defmodule Seed.Mail.Sender.Templates do
 
   def generate({template_name, params}) do
     with template when is_struct(template, Template) <-
-           get_all()
-           |> Enum.find(&(&1.name == template_name)) do
-      builded_template = generate_template(template, params)
+           Enum.find(get_all(), &(&1.name == template_name)),
+         builded_template <- generate_template(template, params) do
       {:ok, builded_template}
     else
       nil -> {:error, :template_not_found}
@@ -40,6 +39,6 @@ defmodule Seed.Mail.Sender.Templates do
 
   defp replace_variables(text, params) do
     Map.keys(params)
-    |> Enum.reduce(text, &(String.replace(&2, "{{ #{&1} }}", params[&1], global: true)))
+    |> Enum.reduce(text, &String.replace(&2, "{{ #{&1} }}", params[&1], global: true))
   end
 end
