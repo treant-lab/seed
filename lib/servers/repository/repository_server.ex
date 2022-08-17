@@ -28,4 +28,10 @@ defmodule Seed.Server.Repository do
 
     {:reply, response, state}
   end
+
+  def handle_call({:find, module, payload}, _from, state) do
+    response = Imp.find_by(module, payload)
+
+    {:reply, response, state}
+  end
 end

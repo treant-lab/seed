@@ -10,4 +10,8 @@ defmodule Seed.Server.Repository.Client do
   def update_by_id(module, id, payload) do
     GenServer.call(Seed.Util.repository(), {:update_by_id, module, id, payload})
   end
+
+  def find_by(module, payload) do
+    GenServer.call(Seed.Util.repository(), {:find, module, payload})
+  end
 end

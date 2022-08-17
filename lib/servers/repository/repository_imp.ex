@@ -1,7 +1,9 @@
 defmodule Seed.Server.Repository.Imp do
   alias Seed.Server.Entity
   alias Seed.Database.Repo
+
   alias Seed.Settings.App
+  alias Seed.Roots.Schema.Root
   import Seraph.Query
 
   def insert({:insert, module, payload, _from} = _params) do
@@ -87,5 +89,58 @@ defmodule Seed.Server.Repository.Imp do
 
     entity_module.changeset_update(entity, payload)
     |> Repo.Node.set()
+  end
+
+  def find_by(entity_name, payload) do
+    entityModule = Seed.Server.Entity.Client.get_module(entity_name)
+
+    # Macro.expand(entityModule)
+    # |> IO.inspect()
+
+    query =
+      match([
+        {e, Root, %{uuid: "hdusahudashudas"}}
+      ])
+      |> IO.inspect()
+
+    # IO.inspect(entityModule.changeset(%{}))
+    # EntityModule.__info__(:attributes)
+    # |> IO.inspect()
+    # c = Root
+    # IO.inspect(Seed.Settings.App.id())
+
+    # Repo.query(
+    #   """
+    #   MATCH (root:Root {uuid: $app_id})-[is_data:IS_DATA]-(data)
+    #   WITH data
+    #   MATCH (n:Example94e9096e4c {username: "Hello-2764b882b1"})
+    #   RETURN n
+    #   """,
+    #   %{app_id: Seed.Settings.App.id()}
+    # )
+
+    # |> Repo.all()
+
+    # Code.eval_quoted(
+    #   quote do
+    #     alias entity_module
+    #     __ENV__
+    #   end
+    # )
+
+    # alias entity_module, as: Enity
+    # Module.ali
+    # IO.inspect(entity_module)
+    # a = Root
+    # is_data = Module.concat([entity_module, IsData])
+    # query = 10
+    # a =
+    #   match([
+    #     {root, Root, %{uuid: App.id()}}
+    #   ])
+
+    # |> return(e)
+    # |> Repo.all()
+    # |> IO.inspect()
   end
 end
