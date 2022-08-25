@@ -65,4 +65,5 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       end
     end
   end
+
 end

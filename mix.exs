@@ -24,7 +24,7 @@ defmodule Seed.MixProject do
   defp deps do
     [
       {:rsa_ex, "~> 0.4"},
-      {:seraph, "~> 0.2.0"},
+      {:seraph, path: "deps/seraph"},
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:stream_data, "~> 0.5", only: :test}

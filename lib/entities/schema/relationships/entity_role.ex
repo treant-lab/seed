@@ -9,7 +9,7 @@ defmodule Seed.Entities.Schema.Relationships.Role do
     incoming_relationship(
       "IS_ROLE",
       Role,
-      :is_role,
+      :role,
       NoProps.RoleToEntity.IsRole,
       cardinality: :one
     )
