@@ -17,6 +17,4 @@ defmodule Seed.Authentication.Services.Creator do
       {:ok, user} when is_struct(user, User) -> {:error, "E-mail already in use."}
     end
   end
-
-
 end

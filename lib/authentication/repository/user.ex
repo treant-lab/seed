@@ -38,4 +38,18 @@ defmodule Seed.Authentication.Repository.User do
       err -> {:error, err}
     end
   end
+
+  def sign_in(email, password) do
+    case get_by_email(email) do
+      {:ok, user} ->
+        if Bcrypt.verify_pass(password, user.password) do
+          {:ok, user}
+        else
+          {:error, "Invalid password."}
+        end
+
+      err ->
+        err
+    end
+  end
 end
