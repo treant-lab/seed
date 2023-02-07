@@ -23,10 +23,9 @@ defmodule SeedTest.Entity.Delete do
              })
 
     schemas = Seed.Server.Entity.Client.get_schemas()
-    schema_name = String.to_atom(entity.name)
-    assert Enum.member?(schemas, schema_name) == true
+    assert Seed.Server.Entity.Client.exists?(entity.name) == true
     assert {:ok, entity} = Seed.Entities.Services.Remover.by_id(entity.uuid)
     schemas = Seed.Server.Entity.Client.get_schemas()
-    assert Enum.member?(schemas, schema_name) == false
+    assert Seed.Server.Entity.Client.exists?(entity.name) == false
   end
 end

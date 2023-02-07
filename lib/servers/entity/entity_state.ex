@@ -17,7 +17,10 @@ defmodule Seed.Server.Entity.State do
   end
 
   def remove_schema(%__MODULE__{schemas: schemas} = state, schema) do
-    schemas = Enum.filter(schemas, &(&1 !== schema))
+    schemas =
+      Enum.filter(schemas, fn {schema_name, _} ->
+        schema_name != schema
+      end)
 
     %__MODULE__{state | schemas: schemas}
   end

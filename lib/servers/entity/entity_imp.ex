@@ -18,4 +18,16 @@ defmodule Seed.Server.Entity.Imp do
       schema == atom_name
     end)
   end
+
+  def exists?(name, schemas) do
+    atom_name = String.to_atom(name)
+
+    Enum.find(schemas, fn {schema, _} ->
+      schema == atom_name
+    end)
+    |> case do
+      nil -> false
+      _ -> true
+    end
+  end
 end

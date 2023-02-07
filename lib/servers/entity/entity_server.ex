@@ -29,4 +29,9 @@ defmodule Seed.Server.Entity do
     state = State.remove_schema(state, schema)
     {:noreply, state}
   end
+
+  def handle_call({:exists?, schema}, _from, state) do
+    exists = Imp.exists?(schema, state.schemas)
+    {:reply, exists, state}
+  end
 end

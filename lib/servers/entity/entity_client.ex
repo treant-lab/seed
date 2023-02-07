@@ -14,4 +14,8 @@ defmodule Seed.Server.Entity.Client do
   def get_schemas() do
     GenServer.call(Seed.Util.entity(), :get_schemas)
   end
+
+  def exists?(schema) do
+    GenServer.call(Seed.Util.entity(), {:exists?, schema})
+  end
 end

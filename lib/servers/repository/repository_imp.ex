@@ -5,7 +5,7 @@ defmodule Seed.Server.Repository.Imp do
   import Seraph.Query
 
   def insert({:insert, module, payload, _from} = _params) do
-    module = Entity.Client.get_module(module)
+    {module, _} = Entity.Client.get_module(module)
     changeset = module.changeset(payload)
 
     Repo.Node.create(changeset)
@@ -77,12 +77,12 @@ defmodule Seed.Server.Repository.Imp do
   end
 
   def find_entity_by_id(entity_name, id) do
-    entity_module = Seed.Server.Entity.Client.get_module(entity_name)
+    {entity_module, _} = Seed.Server.Entity.Client.get_module(entity_name)
     Repo.Node.get(entity_module, id)
   end
 
   def update_by_id(entity_name, id, payload) do
-    entity_module = Seed.Server.Entity.Client.get_module(entity_name)
+    {entity_module, _} = Seed.Server.Entity.Client.get_module(entity_name)
     entity = find_entity_by_id(entity_name, id)
 
     entity_module.changeset_update(entity, payload)
