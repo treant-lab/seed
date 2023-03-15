@@ -1,21 +1,11 @@
 # Seed
 
-**TODO: Add description**
+#### Seed is a small dynamic backend that manages entities, users, and authentications. It uses Neo4j a graph database NoSQL. 
 
-## Installation
+### Entities
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `seed` to your list of dependencies in `mix.exs`:
+Entities are built dynamically, the user defines a schema and it is stored in the database, and in the run time, the seed gets it and builds the schema modules using metaprogramming and stores it in a GenServer to share with other modules.
 
-```elixir
-def deps do
-  [
-    {:seed, "~> 0.1.0"}
-  ]
-end
-```
+### How to test it.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/seed](https://hexdocs.pm/seed).
-
+You need to create a node in the database with the label Root and define it in the config file, setting the key app_id with the uuid of it.
