@@ -1,6 +1,6 @@
 # Seed
 
-#### Seed is a small dynamic backend that manages entities, users, and authentications. It uses Neo4j a graph database NoSQL. 
+#### Seed is a small dynamic backend that manages entities, users, and authentications. It uses Neo4j a graph database NoSQL. This repo is just a part of an architecture of a kind of backend as a service like the Firebase.
 
 ### Entities
 
