@@ -1,8 +1,8 @@
 defmodule Seed.Supervisor do
   use Supervisor
 
-  def start_link(args) do
-    Supervisor.start_link(__MODULE__, args, name: args["name"])
+  def start_link(state, args) do
+    Supervisor.start_link(__MODULE__, state, args)
   end
 
   @impl true
