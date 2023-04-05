@@ -3,8 +3,8 @@ defmodule Seed.Server.Entity do
   alias Seed.Server.Entity.State
   alias Seed.Server.Entity.Imp
 
-  def start_link(_args) do
-    GenServer.start_link(Seed.Server.Entity, [], name: Seed.Util.entity(), timeout: :infinity)
+  def start_link(args) do
+    GenServer.start_link(Seed.Server.Entity, [], args)
   end
 
   def init(_args) do

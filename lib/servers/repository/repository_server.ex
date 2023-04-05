@@ -3,8 +3,8 @@ defmodule Seed.Server.Repository do
   alias Seed.Server.Repository.Imp
 
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(_args) do
-    GenServer.start_link(Seed.Server.Repository, [], name: Seed.Util.repository())
+  def start_link(args) do
+    GenServer.start_link(Seed.Server.Repository, [], args)
   end
 
   def init(_args) do

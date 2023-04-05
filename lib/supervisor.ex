@@ -6,11 +6,11 @@ defmodule Seed.Supervisor do
   end
 
   @impl true
-  def init(_init_arg) do
+  def init(seed_id: seed_id) do
     children = [
       Seed.Database.Repo,
-      Seed.Server.Repository,
-      Seed.Server.Entity
+      {Seed.Server.Repository, [name: :"Repository-#{seed_id}"]},
+      {Seed.Server.Entity, [name: :"Repository-#{seed_id}"]}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
