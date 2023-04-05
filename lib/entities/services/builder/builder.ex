@@ -1,6 +1,5 @@
 defmodule Seed.Entities.Services.EntityBuilder do
   alias Seed.Database.Repo
-  alias Seed.Entities.Schema.Entity
 
   def call(entity) do
     entity =
@@ -12,7 +11,7 @@ defmodule Seed.Entities.Services.EntityBuilder do
         use Seed.Entity.Services.Builder.Macros.Schema, entity: entity
       end
 
-      {:module, module, _, _} =  ast_module
+    {:module, module, _, _} = ast_module
 
     {:ok, {module, ast_module}}
   end
