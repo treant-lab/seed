@@ -52,4 +52,44 @@ defmodule Seed.Authentication.Repository.User do
         err
     end
   end
+
+  def get_all_auths(uuid) do
+    Repo.query(
+      """
+      MATCH (r:Root {uuid: $uuid})
+      MATCH (r)-[:IS_USER]-(n)
+      RETURN n
+      """,
+      %{uuid: uuid}
+    )
+    |> IO.inspect()
+  end
+
+  def get_total_users(uuid) do
+    Repo.query(
+      """
+      MATCH (r:Root {uuid: $uuid})
+      MATCH (r)-[:IS_USER]-(n)
+      RETURN count(n) as count
+      """,
+      %{uuid: uuid}
+    )
+    |> case do
+      {:ok, [%{"count" => count}]} -> count
+      _ -> 0
+    end
+  end
+
+  def search_users(uuid, search) do
+    Repo.query(
+      """
+      MATCH (r:Root {uuid: $uuid})
+      MATCH (r)-[:IS_USER]-(n:User)
+      WHERE n.email CONTAINS $search
+      RETURN n.uuid as uuid, n.email as email, LIMIT 10
+      """,
+      %{uuid: uuid, search: search}
+    )
+    |> IO.inspect()
+  end
 end

@@ -6,8 +6,9 @@ defmodule Seed.Application do
 
     children = [
       Seed.Database.Repo,
-      {Seed.Server.Repository, [name: :"Repository-#{seed_id}"]},
-      {Seed.Server.Entity, [name: :"Entity-#{seed_id}"]}
+      {Seed.Server.Repository, [name: :"Repository-#{seed_id}", seed_id: seed_id]},
+      {Seed.Server.Entity, [name: :"Entity-#{seed_id}", seed_id: seed_id]},
+      {Seed.Server.Auth, [name: :"Auth-#{seed_id}", seed_id: seed_id]}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: __MODULE__)
