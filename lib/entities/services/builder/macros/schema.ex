@@ -67,6 +67,10 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       def get_fields() do
         @entity.fields
       end
+
+      def schema() do
+        @entity
+      end
     end
   end
 end
