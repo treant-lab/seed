@@ -19,9 +19,15 @@ defmodule Seed.Server.Auth do
     {:reply, total, state}
   end
 
-  def handle_call({:search, search}, _from, seed_id: id = state) do
-    result = Imp.search_users_by_email(id, search)
+  def handle_call({:search, ""}, _from, seed_id: id = state) do
+    data = Imp.search_users_by_email(id, "@")
 
-    {:reply, result, state}
+    {:reply, data, state}
+  end
+
+  def handle_call({:search, search}, _from, seed_id: id = state) do
+    data = Imp.search_users_by_email(id, search)
+
+    {:reply, data, state}
   end
 end

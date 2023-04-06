@@ -85,19 +85,16 @@ defmodule Seed.Authentication.Repository.User do
   end
 
   def search_users(uuid, search) do
-    IO.inspect(search)
-
     Repo.query(
       """
       MATCH (r:Root {uuid: $uuid})
       MATCH (r)-[:IS_USER]-(n:User)
       WHERE n.email CONTAINS $search
       REMOVE n.password
-      RETURN n LIMIT 10
+      RETURN n as auth LIMIT 10
       """,
       %{uuid: uuid, search: search}
     )
-    |> IO.inspect()
     |> case do
       {:ok, data} -> data
       _ -> []
