@@ -4,6 +4,7 @@ defmodule Seed.Server.Repository do
 
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(args) do
+    IO.inspect(args)
     GenServer.start_link(Seed.Server.Repository, [], args)
   end
 

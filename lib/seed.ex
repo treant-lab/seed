@@ -4,20 +4,21 @@ defmodule Seed.Application do
   def start(_type, _args) do
     children = [
       Seed.Database.Repo,
-      Seed.Server.Repository,
-      Seed.Server.Entity
+      Seed.DynamicSupervisor
+      # Seed.Server.Repository,
+      # Seed.Server.Entity
     ]
 
-    Supervisor.start_link(children, strategy: :one_for_one, name: :"#{Seed.Settings.App.id()}")
+    Supervisor.start_link(children, strategy: :one_for_one, name: __MODULE__)
   end
 
-  def start(_type, seed_uuid: seed_id) do
-    children = [
-      Seed.Database.Repo,
-      Seed.Server.Repository,
-      Seed.Server.Entity
-    ]
+  # def start(_type, seed_uuid: seed_id) do
+  #   children = [
+  #     Seed.Database.Repon,
+  #     {Seed.Server.Repository, [name: :"Repository-#{seed_id}"]},
+  #     {Seed.Server.Entity, [name: :"Entity-#{seed_id}"]}
+  #   ]
 
-    Supervisor.start_link(children, strategy: :one_for_one, name: :"#{seed_id}")
-  end
+  #   Supervisor.start_link(children, strategy: :one_for_one, name: :"#{seed_id}")
+  # end
 end

@@ -14,11 +14,12 @@ defmodule Seed.MixProject do
 
   # Run "mix help compile.app" to learn about applications.
   def application do
-    # [
-    #   mod: {Seed.Application, []},
-    #   extra_applications: [:logger, :rsa_ex]
-    # ]
-    []
+    [
+      mod: {Seed.Application, []},
+      extra_applications: [:logger, :rsa_ex]
+    ]
+
+    # []
   end
 
   # Run "mix help deps" to learn about dependencies.
