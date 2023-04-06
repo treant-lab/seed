@@ -4,6 +4,7 @@ defmodule Seed.Server.Entity do
   alias Seed.Server.Entity.Imp
 
   def start_link(args) do
+    IO.inspect(args)
     GenServer.start_link(Seed.Server.Entity, [], args)
   end
 
@@ -18,6 +19,10 @@ defmodule Seed.Server.Entity do
 
   def handle_call(:get_schemas, _from, %State{schemas: schemas} = state) do
     {:reply, schemas, state}
+  end
+
+  def handle_call(:count_schemas, _from, %State{schemas: schemas} = state) do
+    {:reply, Enum.count(schemas), state}
   end
 
   def handle_cast({:push_schema, schema}, state) do

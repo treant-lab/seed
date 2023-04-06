@@ -63,7 +63,10 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
         entity
         |> cast(payload, get_cast_fields(@entity))
       end
+
+      def get_fields() do
+        @entity.fields
+      end
     end
   end
-
 end
