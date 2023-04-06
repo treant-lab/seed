@@ -96,8 +96,13 @@ defmodule Seed.Authentication.Repository.User do
       %{uuid: uuid, search: search}
     )
     |> case do
-      {:ok, data} -> data
-      _ -> []
+      {:ok, data} ->
+        Enum.map(data, fn %{"auth" => node} ->
+          %{"email" => node.properties["email"], "uuid" => node.properties["uuid"]}
+        end)
+
+      _ ->
+        []
     end
   end
 end
