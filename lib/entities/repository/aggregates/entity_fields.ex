@@ -4,9 +4,8 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
   alias Seed.Entities.Schema.Relationships.Field
   alias Seed.Entities.Schema.Relationships.NoProps.EntityToField.IsField
 
-  @spec create_fields(Entity.t(), list(Field.t())) :: {:ok, list(Field.t())} | {:error, any()}
   def create_fields(entity, fields) do
-    with :ok <- includes_duplicated?(fields),
+    with :ok <- includes_duplicated?(entity, fields),
          {:ok, fields} <- create_all_fields(fields),
          {:ok, _relations} <- create_is_field_relation_for_all(entity, fields) do
       {:ok, fields}
@@ -15,8 +14,16 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
     end
   end
 
-  defp includes_duplicated?(fields) do
-    names = Enum.map(fields, & &1.name)
+  defp includes_duplicated?(entity, fields) do
+    entity =
+      entity
+      |> Repo.Node.preload(:fields)
+
+    entity_fields = entity.fields
+
+    fields = entity_fields ++ fields
+
+    names = Enum.map(fields, &Map.get(&1, :name, ""))
     duplicated_names = names -- Enum.uniq(names)
 
     case duplicated_names do
@@ -68,7 +75,28 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
   defp create_entity_field(field) do
     entity_field_changeset = Field.changeset(%Field{}, field)
-
+    # IO.inspect(entity_field_changeset)
     Repo.Node.create(entity_field_changeset)
+  end
+
+  def remove_field(root_id, entity_id, field_id) do
+    Repo.query(
+      """
+      MATCH (r:Root {uuid: $root_id})
+      MATCH (e:Entity {uuid: $entity_id})
+      MATCH (f:Field {uuid: $field_id})
+      DETACH DELETE f
+      RETURN f
+      """,
+      %{
+        root_id: root_id,
+        entity_id: entity_id,
+        field_id: field_id
+      }
+    )
+    |> case do
+      {:ok, [%{"f" => field}]} -> {:ok, field}
+      _ -> {:error, "Invalid params"}
+    end
   end
 end

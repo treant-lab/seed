@@ -62,7 +62,6 @@ defmodule Seed.Authentication.Repository.User do
       """,
       %{uuid: uuid}
     )
-    |> IO.inspect()
   end
 
   def get_total_users(uuid) do

@@ -1,6 +1,7 @@
 defmodule Seed.Server.Entity.Imp do
   alias Seed.Entities.Repository.Reader
   alias Seed.Entities.Services.EntityBuilder
+  alias Seed.Server.Entity.State
 
   @spec get_all_schemas :: list(Seraph.Schema.t())
   def get_all_schemas() do
@@ -19,6 +20,13 @@ defmodule Seed.Server.Entity.Imp do
     end)
   end
 
+  def get_by_id(id, schemas) do
+    schema =
+      Enum.find(schemas, fn {module, _} ->
+        module.id() == id
+      end)
+  end
+
   def exists?(name, schemas) do
     atom_name = String.to_atom(name)
 
@@ -28,6 +36,36 @@ defmodule Seed.Server.Entity.Imp do
     |> case do
       nil -> false
       _ -> true
+    end
+  end
+
+  def add_field(entity_id, payload, %State{schemas: schemas, id: id} = state) do
+    with {:ok, entity} <-
+           Seed.Entities.Repository.Reader.by_id(id, entity_id),
+         {:ok, fields} <-
+           Seed.Entities.Repository.Aggregates.Field.create_fields(entity, [payload]),
+         {:ok, entity} <-
+           Seed.Entities.Repository.Reader.by_id(id, entity_id),
+         {:ok, schema} <- Seed.Entities.Services.EntityBuilder.call(entity),
+         state <- Seed.Server.Entity.State.replace_schema(state, schema) do
+      {:ok, state, fields}
+    else
+      error ->
+        error
+    end
+  end
+
+  @spec remove_field(any, any, Seed.Server.Entity.State.t()) :: any
+  def remove_field(entity_id, field_id, %State{id: id} = state) do
+    Seed.Entities.Repository.Aggregates.Field.remove_field(id, entity_id, field_id)
+  end
+
+  def create(payload, %State{id: id} = state) do
+    with {:ok, entity} <- Seed.Entities.Services.Creation.call(payload, id),
+         {:ok, module} <- Seed.Entities.Services.EntityBuilder.call(entity) do
+      {:ok, module, state}
+    else
+      error -> error
     end
   end
 end

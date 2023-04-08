@@ -29,7 +29,5 @@ defmodule Seed.Server.Auth do
   @impl true
   def terminate(reason, state) do
     IO.inspect("terminate/2 callback")
-    IO.inspect({:reason, reason})
-    IO.inspect({:state, state})
   end
 end

@@ -1,8 +1,7 @@
 defmodule Seed.Authentication.Services.Creator do
-  alias Seed.Authentication.Schema.{User, Relationships.NoProps}
-  alias Seed.Roots.Schema.Root
+  alias Seed.Authentication.Schema.User
+
   alias Seed.Database.Repo
-  alias Seed.Settings.App
   alias Seed.Authentication.Repository
 
   def call(params) do

@@ -2,8 +2,6 @@ defmodule Seed.Supervisor do
   use Supervisor
 
   def start_link(seed_id: id) do
-    IO.inspect(id)
-    IO.inspect(:"Supervisor-#{id}")
     Supervisor.start_link(__MODULE__, [seed_id: id], name: :"Supervisor-#{id}")
   end
 

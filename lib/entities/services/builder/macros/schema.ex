@@ -71,6 +71,10 @@ defmodule Seed.Entity.Services.Builder.Macros.Schema do
       def schema() do
         @entity
       end
+
+      def id() do
+        @entity.uuid
+      end
     end
   end
 end
