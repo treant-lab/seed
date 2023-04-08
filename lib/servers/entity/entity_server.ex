@@ -62,11 +62,8 @@ defmodule Seed.Server.Entity do
     end
   end
 
-  # def handle_cast({:remove_entity_field, payload}, state) do
-  # end
-
-  # def handle_call({:exists?, schema}, _from, state) do
-  #   exists = Imp.exists?(schema, state.schemas)
-  #   {:reply, exists, state}
-  # end
+  def handle_call({:exists?, schema}, _from, state) do
+    exists = Imp.exists?(schema, state.schemas)
+    {:reply, exists, state}
+  end
 end

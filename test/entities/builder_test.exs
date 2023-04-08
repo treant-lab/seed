@@ -18,7 +18,8 @@ defmodule SeedTest.Entities.Builder do
         ]
       })
 
-    {module, ast_module} = Seed.Server.Entity.Client.get_module("Example#{random_string}")
+    app_id = Seed.Settings.App.id()
+    {module, ast_module} = Seed.Server.Entity.Client.get_module(app_id, "Example#{random_string}")
     # |> IO.inspect()
     # :beam_disasm.function__code()
     # |> IO.inspect()

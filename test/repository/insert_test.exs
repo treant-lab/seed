@@ -12,21 +12,30 @@ defmodule SeedTest.Repository.Insert do
       %{name: "email", type: "string", required: true},
       %{name: "age", type: "number", required: true}
     ]
+
     name = "Example#{random_string}"
 
     {:ok, entity} =
-             Seed.Entities.Services.Creation.call(%{
-               name: name,
-               color: "#ffffff",
-               fields: fields
-             })
+      Seed.Entities.Services.Creation.call(
+        %{
+          name: name,
+          color: "#ffffff",
+          fields: fields
+        },
+        Seed.Settings.App.id()
+      )
 
     %{name: name}
   end
 
   test "should insert the data when the params is right", %{name: name} do
+    assert {:ok, entity} =
+             Seed.Server.Repository.Client.insert(
+               Seed.Settings.App.id(),
+               name,
+               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}
+             )
 
-    assert {:ok, entity} = Seed.Server.Repository.Client.insert(name, %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}, self())
     entity = Repo.Node.preload(entity, :is_data)
     assert %Seed.Roots.Schema.Root{uuid: uuid} = entity.root
     assert uuid = Seed.Settings.App.id()

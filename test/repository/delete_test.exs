@@ -16,11 +16,14 @@ defmodule SeedTest.Repository.Delete do
     name = "Example#{random_string}"
 
     {:ok, entity} =
-      Seed.Entities.Services.Creation.call(%{
-        name: name,
-        color: "#ffffff",
-        fields: fields
-      })
+      Seed.Entities.Services.Creation.call(
+        %{
+          name: name,
+          color: "#ffffff",
+          fields: fields
+        },
+        Seed.Settings.App.id()
+      )
 
     %{name: name}
   end
@@ -28,23 +31,25 @@ defmodule SeedTest.Repository.Delete do
   test "should be possible delete an entity data.", %{name: name} do
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
+               Seed.Settings.App.id(),
                name,
-               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20},
-               self()
+               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}
              )
 
-    assert :ok = Seed.Server.Repository.Client.delete_by_id(entity.uuid)
+    assert :ok = Seed.Server.Repository.Client.delete_by_id(Seed.Settings.App.id(), entity.uuid)
   end
 
   test "should be possible delete an entity data with soft delete option", %{name: name} do
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
+               Seed.Settings.App.id(),
                name,
-               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20},
-               self()
+               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}
              )
 
-    assert {:ok, entity} = Seed.Server.Repository.Client.delete_by_id(entity.uuid, true)
+    assert {:ok, entity} =
+             Seed.Server.Repository.Client.delete_by_id(Seed.Settings.App.id(), entity.uuid, true)
+
     assert entity = Repo.Node.preload(entity, :soft_deleted)
     assert entity.soft_deleted.uuid == Seed.Settings.App.id()
   end

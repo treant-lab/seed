@@ -23,7 +23,7 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
     fields = entity_fields ++ fields
 
-    names = Enum.map(fields, &Map.get(&1, :name, ""))
+    names = Enum.map(fields, & &1.name)
     duplicated_names = names -- Enum.uniq(names)
 
     case duplicated_names do

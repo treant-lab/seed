@@ -16,11 +16,14 @@ defmodule SeedTest.Repository.Update do
     name = "Example#{random_string}"
 
     {:ok, entity} =
-      Seed.Entities.Services.Creation.call(%{
-        name: name,
-        color: "#ffffff",
-        fields: fields
-      })
+      Seed.Entities.Services.Creation.call(
+        %{
+          name: name,
+          color: "#ffffff",
+          fields: fields
+        },
+        Seed.Settings.App.id()
+      )
 
     %{name: name}
   end
@@ -28,16 +31,21 @@ defmodule SeedTest.Repository.Update do
   test "should be possible update an entity data.", %{name: name} do
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
+               Seed.Settings.App.id(),
                name,
-               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20},
-               self()
+               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}
              )
 
     assert {:ok, entity} =
-             Seed.Server.Repository.Client.update_by_id(name, entity.uuid, %{
-               username: "hello updated!",
-               password: "hello pass"
-             })
+             Seed.Server.Repository.Client.update_by_id(
+               Seed.Settings.App.id(),
+               name,
+               entity.uuid,
+               %{
+                 username: "hello updated!",
+                 password: "hello pass"
+               }
+             )
 
     assert entity.username == "hello updated!"
 
@@ -47,15 +55,20 @@ defmodule SeedTest.Repository.Update do
   test "should be not possible add new fields using update_by_id", %{name: name} do
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
+               Seed.Settings.App.id(),
                name,
-               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20},
-               self()
+               %{username: "Hello", password: "HEHEHE", email: "dev@dev.com", age: 20}
              )
 
     assert {:ok, entity} =
-             Seed.Server.Repository.Client.update_by_id(name, entity.uuid, %{
-               newfielddata: "hello updated!"
-             })
+             Seed.Server.Repository.Client.update_by_id(
+               Seed.Settings.App.id(),
+               name,
+               entity.uuid,
+               %{
+                 newfielddata: "hello updated!"
+               }
+             )
 
     assert Map.has_key?(entity, :newfielddata) == false
   end

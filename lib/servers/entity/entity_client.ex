@@ -15,8 +15,8 @@ defmodule Seed.Server.Entity.Client do
     id
   end
 
-  def get_module(name) do
-    GenServer.call(Seed.Util.entity(), {:get, name})
+  def get_module(id, name) do
+    GenServer.call(server(id), {:get, name})
   end
 
   def push_schema(id, schema) do
@@ -27,16 +27,16 @@ defmodule Seed.Server.Entity.Client do
     GenServer.call(server(id), :count_schemas)
   end
 
-  def remove_schema(schema) when is_atom(schema) do
-    GenServer.cast(Seed.Util.entity(), {:remove_schema, schema})
+  def remove_schema(id, schema) when is_atom(schema) do
+    GenServer.cast(server(id), {:remove_schema, schema})
   end
 
-  def get_schemas() do
-    GenServer.call(Seed.Util.entity(), :get_schemas)
+  def get_schemas(id) do
+    GenServer.call(server(id), :get_schemas)
   end
 
-  def exists?(schema) do
-    GenServer.call(Seed.Util.entity(), {:exists?, schema})
+  def exists?(id, schema) do
+    GenServer.call(server(id), {:exists?, schema})
   end
 
   def get_by_id(id, entity_id) do
