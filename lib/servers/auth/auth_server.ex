@@ -10,7 +10,6 @@ defmodule Seed.Server.Auth do
   end
 
   def init(args) do
-    # IO.inspect(args)
     {:ok, args}
   end
 

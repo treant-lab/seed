@@ -14,6 +14,10 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
     end
   end
 
+  defp get_name(map) do
+    Map.get(map, "name", Map.get(map, :name, ""))
+  end
+
   defp includes_duplicated?(entity, fields) do
     entity =
       entity
@@ -23,7 +27,7 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
     fields = entity_fields ++ fields
 
-    names = Enum.map(fields, & &1.name)
+    names = Enum.map(fields, &get_name(&1))
     duplicated_names = names -- Enum.uniq(names)
 
     case duplicated_names do

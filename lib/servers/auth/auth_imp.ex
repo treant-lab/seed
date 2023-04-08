@@ -1,9 +1,6 @@
 defmodule Seed.Server.Auth.Imp do
-  def get_all_schemas() do
-    Seed.Authentication.Repository.User.get_all_auths()
-    |> IO.inspect()
-
-    []
+  def get_all_schemas(root_id) do
+    Seed.Authentication.Repository.User.get_all_auths(root_id)
   end
 
   def get(name, schemas) do

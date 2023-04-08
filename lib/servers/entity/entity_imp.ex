@@ -3,10 +3,9 @@ defmodule Seed.Server.Entity.Imp do
   alias Seed.Entities.Services.EntityBuilder
   alias Seed.Server.Entity.State
 
-  @spec get_all_schemas :: list(Seraph.Schema.t())
-  def get_all_schemas() do
+  def get_all_schemas(root_id) do
     schemas =
-      Reader.all()
+      Reader.all(root_id)
       |> Parallel.pmap(&EntityBuilder.call!/1)
 
     schemas
@@ -21,10 +20,9 @@ defmodule Seed.Server.Entity.Imp do
   end
 
   def get_by_id(id, schemas) do
-    schema =
-      Enum.find(schemas, fn {module, _} ->
-        module.id() == id
-      end)
+    Enum.find(schemas, fn {module, _} ->
+      module.id() == id
+    end)
   end
 
   def exists?(name, schemas) do
@@ -39,7 +37,7 @@ defmodule Seed.Server.Entity.Imp do
     end
   end
 
-  def add_field(entity_id, payload, %State{schemas: schemas, id: id} = state) do
+  def add_field(entity_id, payload, %State{id: id} = state) do
     with {:ok, entity} <-
            Seed.Entities.Repository.Reader.by_id(id, entity_id),
          {:ok, fields} <-
@@ -55,8 +53,7 @@ defmodule Seed.Server.Entity.Imp do
     end
   end
 
-  @spec remove_field(any, any, Seed.Server.Entity.State.t()) :: any
-  def remove_field(entity_id, field_id, %State{id: id} = state) do
+  def remove_field(entity_id, field_id, %State{id: id} = _state) do
     Seed.Entities.Repository.Aggregates.Field.remove_field(id, entity_id, field_id)
   end
 

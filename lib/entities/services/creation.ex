@@ -11,7 +11,6 @@ defmodule Seed.Entities.Services.Creation do
     call(params, Seed.Settings.App.id())
   end
 
-  @spec call(map(), binary()) :: {:ok, Entity.t()} | {:error, any}
   def call(params, root_id) do
     fields = Map.get(params, :fields, [])
 
@@ -41,6 +40,7 @@ defmodule Seed.Entities.Services.Creation do
 
   defp push_schema_to_entity(entity, root_id) do
     module = Seed.Entities.Services.EntityBuilder.call!(entity)
+
     Seed.Server.Entity.Client.push_schema(root_id, module)
   end
 

@@ -12,7 +12,7 @@ defmodule Seed.Server.Entity.State do
       id: root_id
     }
 
-    %__MODULE__{state | schemas: Imp.get_all_schemas()}
+    %__MODULE__{state | schemas: Imp.get_all_schemas(root_id)}
   end
 
   def push_schema(state, schema) do

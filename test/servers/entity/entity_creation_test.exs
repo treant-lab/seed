@@ -12,6 +12,7 @@ defmodule EntityCreationServer do
 
     previous_count = Seed.Server.Entity.Client.count(id)
     assert {:ok, schema} = Seed.Server.Entity.Client.create(id, payload)
+
     current_count = Seed.Server.Entity.Client.count(id)
 
     assert previous_count != current_count

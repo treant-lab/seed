@@ -17,7 +17,7 @@ defmodule Seed.Server.Entity do
   end
 
   def handle_call(:get_schemas, _from, %State{schemas: schemas} = state) do
-    {:reply, schemas, state}
+    {:reply, {:ok, schemas}, state}
   end
 
   def handle_call(:count_schemas, _from, %State{schemas: schemas} = state) do

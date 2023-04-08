@@ -49,9 +49,9 @@ defmodule Seed.Entities.Repository.Reader do
     end
   end
 
-  def all() do
+  def all(root_id) do
     match([
-      {r, Root, %{uuid: Seed.Settings.App.id()}},
+      {r, Root, %{uuid: root_id}},
       {entity, Entity},
       [{r}, [rel, IsEntity], {entity}]
     ])
