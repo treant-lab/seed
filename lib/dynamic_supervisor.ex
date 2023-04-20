@@ -6,13 +6,14 @@ defmodule Seed.DynamicSupervisor do
   end
 
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
-  def start_link(init_arg) do
-    DynamicSupervisor.start_link(__MODULE__, init_arg, name: __MODULE__)
+  def start_link([name: name] = args) do
+    IO.inspect(args)
+    DynamicSupervisor.start_link(__MODULE__, [], name: name)
   end
 
-  def start_child(seed_id) do
+  def start_child(supervisor, seed_id) do
     spec = {Seed.Supervisor, seed_id: seed_id}
-    DynamicSupervisor.start_child(__MODULE__, spec)
+    DynamicSupervisor.start_child(supervisor, spec)
   end
 end
 
