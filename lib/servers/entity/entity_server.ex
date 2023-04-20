@@ -27,6 +27,10 @@ defmodule Seed.Server.Entity do
     {:reply, {:ok, schemas}, state}
   end
 
+  def handle_call(:get_schemas_map, _from, %State{schemas: schemas} = state) do
+    {:reply, {:ok, State.schema_to_map(state)}, state}
+  end
+
   def handle_call(:count_schemas, _from, %State{schemas: schemas} = state) do
     {:reply, Enum.count(schemas), state}
   end

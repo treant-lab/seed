@@ -47,4 +47,14 @@ defmodule Seed.Server.Entity.State do
       schema -> {:ok, schema, state}
     end
   end
+
+  def schema_to_map(%__MODULE__{schemas: schemas} = _state) do
+    Enum.map(schemas, fn {schema, _} ->
+      %{
+        "name" => schema.name(),
+        "uuid" => schema.id(),
+        "fields" => schema.fields()
+      }
+    end)
+  end
 end
