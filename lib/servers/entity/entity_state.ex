@@ -53,7 +53,7 @@ defmodule Seed.Server.Entity.State do
       %{
         "name" => schema.name(),
         "uuid" => schema.id(),
-        "fields" => schema.fields()
+        "fields" => schema.get_fields()
       }
     end)
   end
