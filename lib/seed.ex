@@ -13,8 +13,8 @@ defmodule Seed.Application do
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: __MODULE__)
-    Seed.DynamicSupervisor.start_child(seed_id)
-    Seed.DynamicSupervisor.start_child("733357e2-df14-11ed-bbc0-18c04df1b012")
+    # Seed.DynamicSupervisor.start_child(seed_id)
+    # Seed.DynamicSupervisor.start_child("733357e2-df14-11ed-bbc0-18c04df1b012")
   end
 
   # def start(_type, seed_uuid: seed_id) do
