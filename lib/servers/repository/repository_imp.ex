@@ -4,13 +4,26 @@ defmodule Seed.Server.Repository.Imp do
   import Seraph.Query
 
   def insert(app_id, {:insert, module, payload} = _params) do
-    {module, _} = Entity.Client.get_module(app_id, module)
-    changeset = module.changeset(payload)
+    module = Entity.Client.get_module(app_id, module)
 
-    Repo.Node.create(changeset)
-    |> case do
-      {:ok, entity} -> create_relation_with_root(app_id, entity)
-      err -> {:error, err}
+    case module do
+      nil ->
+        {:error, "invalid entity name."}
+
+      {:error, message} ->
+        {:error, message}
+
+      {:ok, {module, _}} ->
+        changeset = module.changeset(payload)
+
+        Repo.Node.create(changeset)
+        |> case do
+          {:ok, entity} -> create_relation_with_root(app_id, entity)
+          err -> {:error, err}
+        end
+
+      error ->
+        {:error, error}
     end
   end
 
@@ -76,12 +89,12 @@ defmodule Seed.Server.Repository.Imp do
   end
 
   def find_entity_by_id(app_id, entity_name, id) do
-    {entity_module, _} = Seed.Server.Entity.Client.get_module(app_id, entity_name)
+    {:ok, {entity_module, _}} = Seed.Server.Entity.Client.get_module(app_id, entity_name)
     Repo.Node.get(entity_module, id)
   end
 
   def update_by_id(app_id, entity_name, id, payload) do
-    {entity_module, _} = Seed.Server.Entity.Client.get_module(app_id, entity_name)
+    {:ok, {entity_module, _}} = Seed.Server.Entity.Client.get_module(app_id, entity_name)
     entity = find_entity_by_id(app_id, entity_name, id)
 
     entity_module.changeset_update(entity, payload)

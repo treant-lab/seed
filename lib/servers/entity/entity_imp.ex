@@ -12,10 +12,8 @@ defmodule Seed.Server.Entity.Imp do
   end
 
   def get(name, schemas) do
-    atom_name = String.to_atom(name)
-
     Enum.find(schemas, fn {schema, _} ->
-      schema == atom_name
+      schema.name() == name
     end)
   end
 
@@ -26,10 +24,8 @@ defmodule Seed.Server.Entity.Imp do
   end
 
   def exists?(name, schemas) do
-    atom_name = String.to_atom(name)
-
     Enum.find(schemas, fn {schema, _} ->
-      schema == atom_name
+      schema.name() == name
     end)
     |> case do
       nil -> false
@@ -59,7 +55,8 @@ defmodule Seed.Server.Entity.Imp do
 
   def create(payload, %State{id: id} = state) do
     with {:ok, entity} <- Seed.Entities.Services.Creation.call(payload, id),
-         {:ok, module} <- Seed.Entities.Services.EntityBuilder.call(entity) do
+         {:ok, module} <- Seed.Entities.Services.EntityBuilder.call(entity),
+         %State{} = state <- State.push_schema(state, module) do
       {:ok, module, state}
     else
       error -> error

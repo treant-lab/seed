@@ -18,7 +18,7 @@ defmodule EntityCreationServer do
     assert previous_count != current_count
   end
 
-  test "should return error when try to create an entity calling the server" do
+  test "should return error when try to create an entity calling the server when using wrong payload" do
     id = Seed.Settings.App.id()
     random_string = for _ <- 1..10, into: "", do: <<Enum.random('0123456789abcdef')>>
 

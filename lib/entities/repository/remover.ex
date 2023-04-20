@@ -7,7 +7,7 @@ defmodule Seed.Entities.Repository.Remover do
 
   def by_id(app_id, uuid, soft_delete? \\ false) when is_binary(uuid) do
     match([
-      {r, Root, %{uuid: Seed.Settings.App.id()}},
+      {r, Root, %{uuid: app_id}},
       {entity, Entity, %{uuid: uuid}},
       [{r}, [rel, IsEntity], {entity}]
     ])

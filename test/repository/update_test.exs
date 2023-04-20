@@ -3,7 +3,7 @@ defmodule SeedTest.Repository.Update do
   alias Seed.Entities.Repository.Aggregates.Field
   alias Seed.Database.Repo
 
-  setup do
+  defp create_entity() do
     random_string = for _ <- 1..10, into: "", do: <<Enum.random('0123456789abcdef')>>
 
     fields = [
@@ -16,19 +16,21 @@ defmodule SeedTest.Repository.Update do
     name = "Example#{random_string}"
 
     {:ok, entity} =
-      Seed.Entities.Services.Creation.call(
+      Seed.Server.Entity.Client.create(
+        Seed.Settings.App.id(),
         %{
           name: name,
           color: "#ffffff",
           fields: fields
-        },
-        Seed.Settings.App.id()
+        }
       )
 
-    %{name: name}
+    {:ok, {name, entity}}
   end
 
-  test "should be possible update an entity data.", %{name: name} do
+  test "should be possible update an entity data." do
+    {:ok, {name, entity}} = create_entity()
+
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
                Seed.Settings.App.id(),
@@ -52,7 +54,9 @@ defmodule SeedTest.Repository.Update do
     assert entity.password == "hello pass"
   end
 
-  test "should be not possible add new fields using update_by_id", %{name: name} do
+  test "should be not possible add new fields using update_by_id" do
+    {:ok, {name, entity}} = create_entity()
+
     assert {:ok, entity} =
              Seed.Server.Repository.Client.insert(
                Seed.Settings.App.id(),

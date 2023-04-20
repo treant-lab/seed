@@ -79,7 +79,6 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
   defp create_entity_field(field) do
     entity_field_changeset = Field.changeset(%Field{}, field)
-    # IO.inspect(entity_field_changeset)
     Repo.Node.create(entity_field_changeset)
   end
 

@@ -8,12 +8,19 @@ defmodule Seed.Server.Entity do
   end
 
   def init(id: id) do
-    {:ok, State.initial_state(id)}
+    state = State.initial_state(id)
+
+    {:ok, state}
   end
 
-  def handle_call({:get, entity}, _from, state) do
-    entity = Imp.get(entity, state.schemas)
-    {:reply, entity, state}
+  def handle_call({:get, entity}, _from, %State{schemas: schemas} = state) do
+    reply =
+      case Imp.get(entity, schemas) do
+        nil -> {:error, "Invalid entity name"}
+        entity -> {:ok, entity}
+      end
+
+    {:reply, reply, state}
   end
 
   def handle_call(:get_schemas, _from, %State{schemas: schemas} = state) do
@@ -25,6 +32,11 @@ defmodule Seed.Server.Entity do
   end
 
   def handle_cast({:push_schema, schema}, state) do
+    state = State.push_schema(state, schema)
+    {:noreply, state}
+  end
+
+  def handle_call({:push_schema, schema}, _from, state) do
     state = State.push_schema(state, schema)
     {:noreply, state}
   end

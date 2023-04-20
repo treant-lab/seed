@@ -16,13 +16,13 @@ defmodule SeedTest.Repository.Insert do
     name = "Example#{random_string}"
 
     {:ok, entity} =
-      Seed.Entities.Services.Creation.call(
+      Seed.Server.Entity.Client.create(
+        Seed.Settings.App.id(),
         %{
           name: name,
           color: "#ffffff",
           fields: fields
-        },
-        Seed.Settings.App.id()
+        }
       )
 
     %{name: name}

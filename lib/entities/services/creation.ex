@@ -8,7 +8,13 @@ defmodule Seed.Entities.Services.Creation do
   alias Seed.Entities.Repository.Aggregates.Field
 
   def call(params) do
-    call(params, Seed.Settings.App.id())
+    case call(params, Seed.Settings.App.id()) do
+      {:ok, entity} ->
+        {:ok, entity}
+
+      error ->
+        error
+    end
   end
 
   def call(params, root_id) do
@@ -20,7 +26,6 @@ defmodule Seed.Entities.Services.Creation do
          {:ok, entity} <- Repo.Node.create(changeset),
          {:ok, _relation} <- create_root_relation(entity, root_id),
          {:ok, _fields} <- Field.create_fields(entity, fields) do
-      push_schema_to_entity(entity, root_id)
       {:ok, entity}
     else
       nil -> {:error, :empty_name}
@@ -36,12 +41,6 @@ defmodule Seed.Entities.Services.Creation do
 
   defp delete_nodes_with_error(fields_with_error) do
     {:error, :bad_params}
-  end
-
-  defp push_schema_to_entity(entity, root_id) do
-    module = Seed.Entities.Services.EntityBuilder.call!(entity)
-
-    Seed.Server.Entity.Client.push_schema(root_id, module)
   end
 
   defp create_root_relation(entity, root_id) do

@@ -23,12 +23,17 @@ defmodule Seed.Server.Entity.Client do
     GenServer.cast(server(id), {:push_schema, schema})
   end
 
+  @spec push_schema_call(atom | binary, any) :: any
+  def push_schema_call(id, schema) do
+    GenServer.call(server(id), {:push_schema, schema})
+  end
+
   def count(id) do
     GenServer.call(server(id), :count_schemas)
   end
 
-  def remove_schema(id, schema) when is_atom(schema) do
-    GenServer.cast(server(id), {:remove_schema, schema})
+  def remove_schema(id, name) do
+    GenServer.cast(server(id), {:remove_schema, name})
   end
 
   def get_schemas(id) do
