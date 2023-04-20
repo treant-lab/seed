@@ -20,8 +20,6 @@ defmodule Seed.Server.Entity.State do
   end
 
   def remove_schema(%__MODULE__{schemas: schemas} = state, schema) do
-    IO.inspect(schema)
-
     schemas =
       Enum.filter(schemas, fn {module, _} ->
         module.name() != schema
