@@ -44,17 +44,13 @@ defmodule Seed.Server.Entity.State do
     Enum.find(schemas, fn {module, _} -> module.id() == id end)
     |> case do
       nil -> {:error, "entity not found."}
-      schema -> {:ok, schema, state}
+      {module, _} -> {:ok, module.schema(), state}
     end
   end
 
   def schema_to_map(%__MODULE__{schemas: schemas} = _state) do
-    Enum.map(schemas, fn {schema, _} ->
-      %{
-        "name" => schema.name(),
-        "uuid" => schema.id(),
-        "fields" => schema.get_fields()
-      }
+    Enum.map(schemas, fn {module, _} ->
+      module.schema()
     end)
   end
 end

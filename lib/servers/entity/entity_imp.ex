@@ -49,6 +49,22 @@ defmodule Seed.Server.Entity.Imp do
     end
   end
 
+  def update_entity_color(entity_id, color, %State{id: id} = state) do
+    with {:ok, entity} <-
+           Seed.Entities.Repository.Reader.by_id(id, entity_id),
+         {:ok, _} <-
+           Seed.Entities.Repository.Updater.update_color(id, entity_id, color),
+         {:ok, entity} <-
+           Seed.Entities.Repository.Reader.by_id(id, entity_id),
+         {:ok, schema} <- Seed.Entities.Services.EntityBuilder.call(entity),
+         state <- Seed.Server.Entity.State.replace_schema(state, schema) do
+      {:ok, state, entity}
+    else
+      error ->
+        error
+    end
+  end
+
   def remove_field(entity_id, field_id, %State{id: id} = _state) do
     Seed.Entities.Repository.Aggregates.Field.remove_field(id, entity_id, field_id)
   end

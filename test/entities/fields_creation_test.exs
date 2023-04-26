@@ -34,4 +34,21 @@ defmodule SeedTest.Entity.FieldCreation do
                ]
              })
   end
+
+  test "should return error when field name is not camel case" do
+    random_string = for _ <- 1..10, into: "", do: <<Enum.random('0123456789abcdef')>>
+
+    assert {:error, _} =
+             Seed.Entities.Services.Creation.call(%{
+               name: "Example#{random_string}",
+               color: "#ffffff",
+               fields: [
+                 %{name: "user name", type: "string", required: true},
+                 %{name: "username", type: "string", required: true},
+                 %{name: "email", type: "string", required: true},
+                 %{name: "age", type: "number", required: true}
+               ]
+             })
+             |> IO.inspect()
+  end
 end

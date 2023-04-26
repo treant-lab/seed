@@ -6,11 +6,11 @@ defmodule Seed.Application do
     supervisor = :"Seed.DynamicSupervisor"
 
     children = [
-      Seed.Database.Repo
-      # {Seed.DynamicSupervisor, [name: supervisor]}
-      # {Seed.Server.Repository, [name: :"Repository-#{seed_id}", seed_id: seed_id]},
-      # {Seed.Server.Entity, [name: :"Entity-#{seed_id}", seed_id: seed_id]},
-      # {Seed.Server.Auth, [name: :"Auth-#{seed_id}", seed_id: seed_id]}
+      Seed.Database.Repo,
+      {Seed.DynamicSupervisor, [name: supervisor]},
+      {Seed.Server.Repository, [name: :"Repository-#{seed_id}", seed_id: seed_id]},
+      {Seed.Server.Entity, [name: :"Entity-#{seed_id}", seed_id: seed_id]},
+      {Seed.Server.Auth, [name: :"Auth-#{seed_id}", seed_id: seed_id]}
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one, name: __MODULE__)

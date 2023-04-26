@@ -8,6 +8,7 @@ defmodule Seed.Server.Entity do
   end
 
   def init(id: id) do
+    IO.inspect(id)
     state = State.initial_state(id)
 
     {:ok, state}
@@ -81,5 +82,12 @@ defmodule Seed.Server.Entity do
   def handle_call({:exists?, schema}, _from, state) do
     exists = Imp.exists?(schema, state.schemas)
     {:reply, exists, state}
+  end
+
+  def handle_call({:update_entity_color, entity_id, color}, _from, state) do
+    case Imp.update_entity_color(entity_id, color, state) do
+      {:ok, state, entity} -> {:reply, {:ok, entity}, state}
+      error -> {:reply, error, state}
+    end
   end
 end

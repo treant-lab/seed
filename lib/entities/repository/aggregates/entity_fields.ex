@@ -56,11 +56,24 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
   end
 
   defp create_all_fields(fields) do
-    field_task_list = Enum.map(fields, &create_entity_field(&1))
+    case is_all_valid?(fields) do
+      true ->
+        field_task_list = Enum.map(fields, &create_entity_field(&1))
 
-    field_task_list
-    |> Enum.to_list()
-    |> handle_tasks_response()
+        field_task_list
+        |> Enum.to_list()
+        |> handle_tasks_response()
+
+      false ->
+        {:error, {:invalid_field, fields}}
+    end
+  end
+
+  defp is_all_valid?(fields) do
+    Enum.all?(fields, fn field ->
+      changeset = Field.changeset(%Field{}, field)
+      changeset.valid?
+    end)
   end
 
   defp handle_tasks_response(responses) do
@@ -79,7 +92,11 @@ defmodule Seed.Entities.Repository.Aggregates.Field do
 
   defp create_entity_field(field) do
     entity_field_changeset = Field.changeset(%Field{}, field)
-    Repo.Node.create(entity_field_changeset)
+
+    case entity_field_changeset.valid? do
+      true -> Repo.Node.create(entity_field_changeset)
+      false -> {:error, entity_field_changeset}
+    end
   end
 
   def remove_field(root_id, entity_id, field_id) do
